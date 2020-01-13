@@ -1,0 +1,123 @@
+﻿<Window x:Class="KeySoundMaker.Pages.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KeySoundMaker.Pages"
+        mc:Ignorable="d"
+        Title="Keysound Maker Plus by Veritas501 : v1.0.1" Height="400" Width="600"
+        xmlns:s="https://github.com/canton7/Stylet"
+        d:DataContext="{d:DesignInstance local:MainViewModel}" ResizeMode="CanMinimize">
+	<StackPanel Margin="20">
+		<Grid Margin="0,0,0,10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*" />
+				<ColumnDefinition Width="5*" />
+				<ColumnDefinition Width="1*" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0">SoundFont2：</TextBlock>
+			<TextBox x:Name="txtSoundfont" Grid.Column="1" Margin="10,0,0,0" Text="{Binding Soundfont2,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"></TextBox>
+			<Button x:Name="btnSoundfont" Grid.Column="2" Margin="10,0,0,0" Command="{s:Action OpenSoundfont2}">选择并设定</Button>
+		</Grid>
+		<Grid Margin="0,0,0,20">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*" />
+				<ColumnDefinition Width="5*" />
+				<ColumnDefinition Width="1*" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0">输出目录：</TextBlock>
+			<TextBox x:Name="txtOutput" Grid.Column="1" Margin="10,0,0,0" Text="{Binding OutputDir,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"></TextBox>
+			<Button x:Name="btnOutput" Grid.Column="2" Margin="10,0,0,0" Command="{s:Action SetOutputDir}">选择并设定</Button>
+		</Grid>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*" />
+				<ColumnDefinition Width="1*" />
+			</Grid.ColumnDefinitions>
+			<StackPanel Grid.Column="0" Margin="0,0,10,10">
+				<Grid Margin="0,0,0,10">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*" />
+						<ColumnDefinition Width="3*" />
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0">乐器种类：</TextBlock>
+					<ComboBox x:Name="cmbInstType" Grid.Column="1" ItemsSource="{Binding InstTypeName}" SelectedIndex="{Binding InstTypeIdx,UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+				</Grid>
+				<Grid Margin="0,0,0,10">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*" />
+						<ColumnDefinition Width="3*" />
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0">BPM：</TextBlock>
+					<TextBox x:Name="txtBpm" Grid.Column="1" Text="{Binding Bpm,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+				</Grid>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*" />
+						<ColumnDefinition Width="3*" />
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0">音高：</TextBlock>
+					<ComboBox x:Name="cmbPitch" Grid.Column="1" ItemsSource="{Binding PitchName}" SelectedIndex="{Binding PitchIdx,UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+				</Grid>
+			</StackPanel>
+			<StackPanel Grid.Column="1" Margin="10,0,0,10">
+				<Grid Margin="0,0,0,10">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*" />
+						<ColumnDefinition Width="3*" />
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0">乐器名称：</TextBlock>
+					<ComboBox x:Name="cmbInstName" Grid.Column="1" ItemsSource="{Binding InstName}" SelectedIndex="{Binding InstNameIdx,UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+				</Grid>
+				<Grid Margin="0,0,0,10">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*" />
+						<ColumnDefinition Width="3*" />
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0">拍数：</TextBlock>
+					<TextBox x:Name="txtTempo" Grid.Column="1" Text="{Binding Length,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+				</Grid>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*" />
+						<ColumnDefinition Width="3*" />
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0">音阶：</TextBlock>
+					<ComboBox x:Name="cmbOctave" Grid.Column="1" ItemsSource="{Binding OctaveName}" SelectedIndex="{Binding OctaveIdx,UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+				</Grid>
+			</StackPanel>
+		</Grid>
+		<Grid  Margin="0,0,0,20">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="2*" />
+				<ColumnDefinition Width="7*" />
+				<ColumnDefinition Width="1*" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0">音量（建议100）</TextBlock>
+			<Slider x:Name="sldVol" Grid.Column="1" Margin="10,0,0,0" Value="{Binding Volume,UpdateSourceTrigger=PropertyChanged}" Maximum="100" SmallChange="1"></Slider>
+			<TextBox x:Name="txtVol" Grid.Column="2" Margin="10,0,0,0" Text="{Binding Volume,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+		</Grid>
+		<Grid  Margin="0,0,0,30">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="8*" />
+				<ColumnDefinition Width="8*" />
+				<ColumnDefinition Width="2*" />
+			</Grid.ColumnDefinitions>
+			<Button x:Name="btnListen" Height="50" FontSize="20" Grid.Column="0" Margin="0,0,10,0" Command="{s:Action ListenDemo}">试听</Button>
+			<Button x:Name="btnBuild" Height="50" FontSize="20" Grid.Column="1" Margin="0,0,10,0" Command="{s:Action BuildKeySound}">生成</Button>
+			<StackPanel Grid.Column="2">
+				<RadioButton x:Name="rbtnMid" Margin="0,0,0,2" IsChecked="{Binding BuildTypeMid,UpdateSourceTrigger=PropertyChanged}">.mid</RadioButton>
+				<RadioButton x:Name="rbtnWav" Margin="0,0,0,2" IsChecked="{Binding BuildTypeWav,UpdateSourceTrigger=PropertyChanged}">.wav</RadioButton>
+				<RadioButton x:Name="rbtnMp3" IsChecked="{Binding BuildTypeMp3,UpdateSourceTrigger=PropertyChanged}">.mp3</RadioButton>
+			</StackPanel>
+		</Grid>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*" />
+				<ColumnDefinition Width="4*" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0">输出文件名称：</TextBlock>
+			<TextBox x:Name="txtFilename" IsReadOnly="True" Grid.Column="1" Text="{Binding OutputFilename}"></TextBox>
+		</Grid>
+	</StackPanel>
+</Window>
