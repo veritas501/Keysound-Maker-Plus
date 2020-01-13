@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeySoundMaker.Pages"
         mc:Ignorable="d"
-        Title="Keysound Maker Plus by Veritas501 : v1.0.1" Height="400" Width="600"
+        Title="Keysound Maker Plus by Veritas501 : v1.0.2" Height="400" Width="600"
         xmlns:s="https://github.com/canton7/Stylet"
         d:DataContext="{d:DesignInstance local:MainViewModel}" ResizeMode="CanMinimize">
+	<Window.Resources>
+		<local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+	</Window.Resources>
 	<StackPanel Margin="20">
 		<Grid Margin="0,0,0,10">
 			<Grid.ColumnDefinitions>
@@ -51,7 +54,7 @@
 					<TextBlock Grid.Column="0">BPM：</TextBlock>
 					<TextBox x:Name="txtBpm" Grid.Column="1" Text="{Binding Bpm,UpdateSourceTrigger=PropertyChanged}"></TextBox>
 				</Grid>
-				<Grid>
+				<Grid Visibility="{Binding Path=IsDrum, Converter={StaticResource InverseBooleanToVisibilityConverter},UpdateSourceTrigger=PropertyChanged}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="1*" />
 						<ColumnDefinition Width="3*" />
@@ -69,7 +72,7 @@
 					<TextBlock Grid.Column="0">乐器名称：</TextBlock>
 					<ComboBox x:Name="cmbInstName" Grid.Column="1" ItemsSource="{Binding InstName}" SelectedIndex="{Binding InstNameIdx,UpdateSourceTrigger=PropertyChanged}"></ComboBox>
 				</Grid>
-				<Grid Margin="0,0,0,10">
+				<Grid Margin="0,0,0,10" Visibility="{Binding Path=IsDrum, Converter={StaticResource InverseBooleanToVisibilityConverter},UpdateSourceTrigger=PropertyChanged}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="1*" />
 						<ColumnDefinition Width="3*" />
@@ -77,7 +80,7 @@
 					<TextBlock Grid.Column="0">拍数：</TextBlock>
 					<TextBox x:Name="txtTempo" Grid.Column="1" Text="{Binding Length,UpdateSourceTrigger=PropertyChanged}"></TextBox>
 				</Grid>
-				<Grid>
+				<Grid Visibility="{Binding Path=IsDrum, Converter={StaticResource InverseBooleanToVisibilityConverter},UpdateSourceTrigger=PropertyChanged}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="1*" />
 						<ColumnDefinition Width="3*" />
@@ -103,8 +106,8 @@
 				<ColumnDefinition Width="8*" />
 				<ColumnDefinition Width="2*" />
 			</Grid.ColumnDefinitions>
-			<Button x:Name="btnListen" Height="50" FontSize="20" Grid.Column="0" Margin="0,0,10,0" Command="{s:Action ListenDemo}">试听</Button>
-			<Button x:Name="btnBuild" Height="50" FontSize="20" Grid.Column="1" Margin="0,0,10,0" Command="{s:Action BuildKeySound}">生成</Button>
+			<Button x:Name="btnListen" Height="50" FontSize="20" Grid.Column="0" Margin="0,0,10,0" Command="{s:Action ListenDemo}">Listen</Button>
+			<Button x:Name="btnBuild" Height="50" FontSize="20" Grid.Column="1" Margin="0,0,10,0" Command="{s:Action BuildKeySound}">Build</Button>
 			<StackPanel Grid.Column="2">
 				<RadioButton x:Name="rbtnMid" Margin="0,0,0,2" IsChecked="{Binding BuildTypeMid,UpdateSourceTrigger=PropertyChanged}">.mid</RadioButton>
 				<RadioButton x:Name="rbtnWav" Margin="0,0,0,2" IsChecked="{Binding BuildTypeWav,UpdateSourceTrigger=PropertyChanged}">.wav</RadioButton>

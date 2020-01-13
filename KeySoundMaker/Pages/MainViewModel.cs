@@ -28,9 +28,19 @@ namespace KeySoundMaker.Pages
 		private bool _buildTypeMid;
 		private bool _buildTypeWav;
 		private bool _buildTypeMp3;
+		private bool _isDrum;
 
 		private bool isWorking;
 		private Maker maker;
+
+		public bool IsDrum
+		{
+			get { return _isDrum; }
+			set
+			{
+				SetAndNotify(ref _isDrum, value);
+			}
+		}
 
 		// public
 		public string Soundfont2
@@ -64,10 +74,16 @@ namespace KeySoundMaker.Pages
 		{
 			get
 			{
-				int nameCount = 8;
+				int nameCount;
 				if (InstTypeIdx == (int)Instrument.InstTypeEnum.Drum)
 				{
+					IsDrum = true;
 					nameCount = 47;
+				}
+				else
+				{
+					IsDrum = false;
+					nameCount = 8;
 				}
 				_instName = Array.AsReadOnly<string>(
 					new List<string>(Instrument.InstName).GetRange(
@@ -312,29 +328,29 @@ namespace KeySoundMaker.Pages
 				NotifyOfPropertyChange(() => CanBuildKeySound);
 				NotifyOfPropertyChange(() => CanOpenSoundfont2);
 
-				bool isDrum = InstTypeIdx == (int)Instrument.InstTypeEnum.Drum;
 				int instrument;
 				int key;
-				if (!isDrum)
+				if (!IsDrum)
 				{
+					key = PitchIdx + (OctaveIdx + 1) * 12;
 					instrument = InstTypeIdx * 8 + InstNameIdx;
 				}
 				else
 				{
-					instrument = 34 + InstNameIdx;
+					instrument = 0;
+					key = 35 + InstNameIdx;
 				}
-				key = PitchIdx + (OctaveIdx + 1) * 12;
 				if (key > 127)
 				{
 					MessageBox.Show("No such key");
 				}
 				else
 				{
-					string filename = MusicTheory.GetFileName(instrument, key, (int)Bpm, (int)Length, Volume, isDrum);
+					string filename = MusicTheory.GetFileName(instrument, key, (int)Bpm, (int)Length, Volume, IsDrum);
 					string midiFilename = $"{System.IO.Path.GetTempPath()}\\{filename}.mid";
 					string wavFilename = $"{System.IO.Path.GetTempPath()}\\{filename}.wav";
 
-					maker.GenKeySoundMidi(midiFilename, instrument, key, Bpm, Length, Volume, isDrum);
+					maker.GenKeySoundMidi(midiFilename, instrument, key, Bpm, Length, Volume, IsDrum);
 					maker.SetOutputFilename(wavFilename);
 					maker.RenderMiditoWav(midiFilename);
 					System.Media.SoundPlayer player = new System.Media.SoundPlayer(wavFilename);
@@ -356,18 +372,18 @@ namespace KeySoundMaker.Pages
 				NotifyOfPropertyChange(() => CanBuildKeySound);
 				NotifyOfPropertyChange(() => CanOpenSoundfont2);
 
-				bool isDrum = InstTypeIdx == (int)Instrument.InstTypeEnum.Drum;
 				int instrument;
 				int key;
-				if (!isDrum)
+				if (!IsDrum)
 				{
+					key = PitchIdx + (OctaveIdx + 1) * 12;
 					instrument = InstTypeIdx * 8 + InstNameIdx;
 				}
 				else
 				{
-					instrument = 34 + InstNameIdx;
+					instrument = 0;
+					key = 35 + InstNameIdx;
 				}
-				key = PitchIdx + (OctaveIdx + 1) * 12;
 				if (key > 127)
 				{
 					MessageBox.Show("No such key");
@@ -375,18 +391,18 @@ namespace KeySoundMaker.Pages
 				else
 				{
 					int tick = (int)(480 * Length);
-					string filename = MusicTheory.GetFileName(instrument, key, (int)Bpm, (int)tick, Volume, isDrum);
+					string filename = MusicTheory.GetFileName(instrument, key, (int)Bpm, (int)tick, Volume, IsDrum);
 					string tmpDir = System.IO.Path.GetTempPath();
 					if (BuildTypeMid)
 					{
 						string midiFilename = $"{OutputDir}\\{filename}.mid";
-						maker.GenKeySoundMidi(midiFilename, instrument, key, Bpm, Length, Volume, isDrum);
+						maker.GenKeySoundMidi(midiFilename, instrument, key, Bpm, Length, Volume, IsDrum);
 						OutputFilename = midiFilename;
 					}
 					else
 					{
 						string midiFilename = $"{tmpDir}\\{filename}.mid";
-						maker.GenKeySoundMidi(midiFilename, instrument, key, Bpm, Length, Volume, isDrum);
+						maker.GenKeySoundMidi(midiFilename, instrument, key, Bpm, Length, Volume, IsDrum);
 						if (BuildTypeWav)
 						{
 							string wavFilename = $"{OutputDir}\\{filename}.wav";

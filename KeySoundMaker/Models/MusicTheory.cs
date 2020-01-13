@@ -69,12 +69,15 @@ namespace KeySoundMaker.Models
 			string res = "";
 			if (isDrum)
 			{
-				res += "drum_";
+				res += $"drum_{key}";
 			}
-			res += $"{instrument}_{keyToPitchName(key)}_{bpm}_{length}";
-			if (volume != 100)
+			else
 			{
-				res += $"_{volume}";
+				res += $"{instrument}_{keyToPitchName(key)}_{bpm}_{length}";
+				if (volume != 100)
+				{
+					res += $"_{volume}";
+				}
 			}
 			return res;
 		}
