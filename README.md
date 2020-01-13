@@ -21,6 +21,14 @@ Similar to [dudehacker's keysound maker](https://osu.ppy.sh/community/forums/top
 
 <img src="assets/interface.png" style="zoom: 70%;" />
 
+
+
+## Download (下载)
+
+https://github.com/veritas501/Keysound-Maker-Plus/releases
+
+
+
 ## Some useful soundfont2 (一些常用的soundfont)
 
 - https://sites.google.com/site/soundfonts4u/
