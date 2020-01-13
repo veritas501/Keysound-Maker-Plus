@@ -6,6 +6,7 @@ Similar to [dudehacker's keysound maker](https://osu.ppy.sh/community/forums/top
 - Keysound is generated from soundfont file, sound quality is much better.
 - By using different soundfont, you can generate even 8bit retro keysound.
 - Fix the bug that can't generate drum sound.
+- You can generate different format keysound file.
 
 ---
 
@@ -14,6 +15,7 @@ Similar to [dudehacker's keysound maker](https://osu.ppy.sh/community/forums/top
 - keysound通过soundfont音色库文件生成，更好的音色库能够带来明显的音质提升
 - 使用不同的soundfont可以方便做出8bit的音色
 - 修复了之前不能生成鼓点的bug
+- 可以生成不同的常用文件格式
 
 
 
