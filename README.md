@@ -5,7 +5,7 @@ Similar to [dudehacker's keysound maker](https://osu.ppy.sh/community/forums/top
 
 - Keysound is generated from soundfont file, sound quality is much better.
 - By using different soundfont, you can generate even 8bit retro keysound.
-- You can generate drum sound now
+- Fix the bug that can't generate drum sound.
 
 ---
 
@@ -33,7 +33,7 @@ https://github.com/veritas501/Keysound-Maker-Plus/releases
 
 - https://sites.google.com/site/soundfonts4u/
   - [Nice-Keys-Ultimate-V2.3](https://drive.google.com/file/d/0B3zFERJ2rMQpeDF3cTBlQWJXdHc/view?usp=sharing)
-  - [SGMv2.01-Sal-Guit-Bass-V1.3](https://drive.google.com/file/d/1HV8L5FdX5xZDqpJ83UCaoWPaHFQrLKHj/view?usp=sharing) (Recommand 推荐)
+  - [SGMv2.01-Sal-Guit-Bass-V1.3](https://drive.google.com/file/d/1HV8L5FdX5xZDqpJ83UCaoWPaHFQrLKHj/view?usp=sharing) (Recommend 推荐)
 - https://musical-artifacts.com/
   - [8bitSF ( The Nes Soundfont )](https://musical-artifacts.com/artifacts/23)
 
