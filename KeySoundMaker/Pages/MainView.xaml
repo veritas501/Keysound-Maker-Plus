@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeySoundMaker.Pages"
         mc:Ignorable="d"
-        Title="Keysound Maker Plus by Veritas501 : v1.0.2" Height="400" Width="600"
+        Title="Keysound Maker Plus by Veritas501 : v1.0.3" Height="400" Width="600"
         xmlns:s="https://github.com/canton7/Stylet"
         d:DataContext="{d:DesignInstance local:MainViewModel}" ResizeMode="CanMinimize">
 	<Window.Resources>
