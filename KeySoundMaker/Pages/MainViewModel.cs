@@ -3,6 +3,7 @@ using Stylet;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -17,6 +18,8 @@ namespace KeySoundMaker.Pages
 		private ReadOnlyCollection<string> _octaveName;
 		private string _soundfont2;
 		private string _outputDir;
+		private bool _needParseDir;
+		private string _parseDir;
 		private int _instTypeIdx;
 		private int _instNameIdx;
 		private int _pitchIdx;
@@ -62,6 +65,24 @@ namespace KeySoundMaker.Pages
 				SetAndNotify(ref _outputDir, value);
 				NotifyOfPropertyChange(() => CanListenDemo);
 				NotifyOfPropertyChange(() => CanBuildKeySound);
+			}
+		}
+
+		public string ParseDir
+		{
+			get { return _parseDir; }
+			set
+			{
+				SetAndNotify(ref _parseDir, value);
+			}
+		}
+
+		public bool NeedParseDir
+		{
+			get { return _needParseDir; }
+			set
+			{
+				SetAndNotify(ref _needParseDir, value);
 			}
 		}
 
@@ -319,6 +340,19 @@ namespace KeySoundMaker.Pages
 			folderBrowserDialog.Dispose();
 		}
 
+		public void SetParseDir()
+		{
+			System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+			if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				if (!string.IsNullOrEmpty(folderBrowserDialog.SelectedPath))
+				{
+					ParseDir = folderBrowserDialog.SelectedPath;
+				}
+			}
+			folderBrowserDialog.Dispose();
+		}
+
 		public void ListenDemo()
 		{
 			Task.Run(() =>
@@ -372,6 +406,73 @@ namespace KeySoundMaker.Pages
 				NotifyOfPropertyChange(() => CanBuildKeySound);
 				NotifyOfPropertyChange(() => CanOpenSoundfont2);
 
+				if (NeedParseDir && !string.IsNullOrEmpty(ParseDir))
+				{
+					DirectoryInfo parseDirInfo = new DirectoryInfo(ParseDir);
+					if (!parseDirInfo.Exists)
+					{
+						MessageBox.Show("Can't find parse dir");
+						goto clean;
+					}
+					foreach (var files in parseDirInfo.GetFiles())
+					{
+						if (files.Extension == ".wav" || 
+							files.Extension == ".ogg" || 
+							files.Extension == ".mp3")
+						{
+							string ksFile = files.Name;
+							string ksFileWithoutExt = ksFile.Substring(0, ksFile.LastIndexOf('.'));
+							string[] ksArg = ksFileWithoutExt.Split('_');
+							int instrVal = int.Parse(ksArg[0]);
+							int pitchIdxVal = 0;
+							int OctaveIdxVal = 0;
+							if (ksArg[1].Contains("#"))
+							{
+								pitchIdxVal = PitchName.IndexOf(ksArg[1].Substring(0,2));
+								OctaveIdxVal = int.Parse(ksArg[1].Substring(2, ksArg[1].Length-2));
+							}
+							else
+							{
+								pitchIdxVal = PitchName.IndexOf(ksArg[1].Substring(0,1));
+								OctaveIdxVal = int.Parse(ksArg[1].Substring(1, ksArg[1].Length-1));
+							}
+							int keyVal = pitchIdxVal + (OctaveIdxVal + 2) * 12;
+							int bpmVal = int.Parse(ksArg[2]);
+							double lengthVal = double.Parse(ksArg[3])/480;
+
+							string tmpDir = Path.GetTempPath();
+							if (BuildTypeMid)
+							{
+								string midiFilename = $"{OutputDir}\\{ksFileWithoutExt}.mid";
+								maker.GenKeySoundMidi(midiFilename, instrVal, keyVal, bpmVal, lengthVal, 115, false);
+								OutputFilename = midiFilename;
+							}
+							else
+							{
+								string midiFilename = $"{tmpDir}\\{ksFileWithoutExt}.mid";
+								maker.GenKeySoundMidi(midiFilename, instrVal, keyVal, bpmVal, lengthVal, 115, false);
+								if (BuildTypeWav)
+								{
+									string wavFilename = $"{OutputDir}\\{ksFileWithoutExt}.wav";
+									maker.SetOutputFilename(wavFilename);
+									maker.RenderMiditoWav(midiFilename);
+									OutputFilename = wavFilename;
+								}
+								else
+								{
+									string wavFilename = $"{tmpDir}\\{ksFileWithoutExt}.wav";
+									maker.SetOutputFilename(wavFilename);
+									maker.RenderMiditoWav(midiFilename);
+									string mp3Filename = $"{OutputDir}\\{ksFileWithoutExt}.mp3";
+									maker.EncodeWavtoMp3(wavFilename, mp3Filename);
+									OutputFilename = mp3Filename;
+								}
+							}
+						}
+					}
+					goto clean;
+				}
+
 				int instrument;
 				int key;
 				if (!IsDrum)
@@ -421,7 +522,8 @@ namespace KeySoundMaker.Pages
 						}
 					}
 				}
-				isWorking = false;
+				
+				clean: isWorking = false;
 				NotifyOfPropertyChange(() => CanListenDemo);
 				NotifyOfPropertyChange(() => CanBuildKeySound);
 				NotifyOfPropertyChange(() => CanOpenSoundfont2);
